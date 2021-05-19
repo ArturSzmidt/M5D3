@@ -24,7 +24,7 @@ router.get('/:id', async (req, res, next) => {
   try {
     const fileAsBuffer = fs.readFileSync(authorsFilePath);
     const fileAsString = fileAsBuffer.toString();
-    const fileAsJSON = JSON.parse(fileAsString);
+    const fileAsJSONArray = JSON.parse(fileAsString);
     const author = fileAsJSONArray.find(
       (author) => author.id === req.params.id
     );
@@ -95,12 +95,12 @@ router.put('/:id', async (req, res, next) => {
     const authorIndex = fileAsJSONArray.findIndex(
       (author) => author.id === req.params.id
     );
-    if (authorIndex == -1) {
+    if (!authorIndex == -1) {
       res
         .status(404)
         .send({ message: `Author with ${req.params.id} is not found!` });
     }
-    const previousAuthorData = fileAsJSONArray(authorIndex);
+    const previousAuthorData = fileAsJSONArray[authorIndex];
     const changeAuthor = {
       ...previousAuthorData,
       ...req.body,
